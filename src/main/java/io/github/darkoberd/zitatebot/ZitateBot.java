@@ -3,6 +3,8 @@ package io.github.darkoberd.zitatebot;
 import io.github.darkoberd.zitatebot.commands.ZitatCMD;
 import io.github.darkoberd.zitatebot.handler.CommandHandler;
 import io.github.darkoberd.zitatebot.listeners.CommandListener;
+import io.github.darkoberd.zitatebot.listeners.PrivateMessageListener;
+import io.github.darkoberd.zitatebot.utils.Flags;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -20,11 +22,17 @@ import java.util.Map;
  */
 public class ZitateBot {
 
+    /*
+     * TODO: Reactions, Feste Channel, Leaderboard oder so
+     */
+
     private static String token;
     private static JDA jda;
 
     public static boolean DEBUG = false;
     public static String PREFIX = "!";
+
+    public static Map<String, Flags> flags = new HashMap<>();
 
     public static Map<String, Zitat> zitate = new HashMap<>();
 
@@ -50,6 +58,7 @@ public class ZitateBot {
         builder.setStatus(OnlineStatus.ONLINE);
         addCommands();
         builder.addEventListeners(new CommandListener());
+        builder.addEventListeners(new PrivateMessageListener());
         jda = builder.build();
     }
 

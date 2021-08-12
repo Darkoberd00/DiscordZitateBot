@@ -1,5 +1,8 @@
 package io.github.darkoberd.zitatebot;
 
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -26,9 +29,7 @@ public class Zitat {
     /**
      * Pascal "Inneneinrichtungsexperte" Klaßen
      */
-    private String vorname;
-    private String zweitName;
-    private String nachName;
+    private String name;
 
     /**
      * UUID für die einfachre wieder findung;
@@ -45,11 +46,9 @@ public class Zitat {
      */
     private final String erstelleruserid;
 
-    public Zitat(String zitat, String vorname, String zweitName, String nachName, UUID uuid, Calendar calendar, String erstelleruserid) {
+    public Zitat(String zitat, String name, UUID uuid, Calendar calendar, String erstelleruserid) {
         this.zitat = zitat;
-        this.vorname = vorname;
-        this.zweitName = zweitName;
-        this.nachName = nachName;
+        this.name = name;
         this.uuid = uuid;
         this.calendar = calendar;
         this.erstelleruserid = erstelleruserid;
@@ -65,16 +64,8 @@ public class Zitat {
         return zitat;
     }
 
-    public String getVorname() {
-        return vorname;
-    }
-
-    public String getZweitName() {
-        return zweitName;
-    }
-
-    public String getNachName() {
-        return nachName;
+    public String getName() {
+        return name;
     }
 
     public UUID getUuid() {
@@ -102,20 +93,16 @@ public class Zitat {
         this.zitat = zitat;
     }
 
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
-    }
-
-    public void setZweitName(String zweitName) {
-        this.zweitName = zweitName;
-    }
-
-    public void setNachName(String nachName) {
-        this.nachName = nachName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void addPoints(){
         points++;
+    }
+
+    public boolean haveAllImplements(){
+        return zitat != null && name != null;
     }
 
     public void removePoints(){
@@ -126,12 +113,22 @@ public class Zitat {
     public String toString() {
         return "Zitat{" +
                 "zitat='" + zitat + '\'' +
-                ", vorname='" + vorname + '\'' +
-                ", zweitName='" + zweitName + '\'' +
-                ", nachName='" + nachName + '\'' +
+                ", points=" + points +
+                ", votedusers=" + votedusers +
+                ", name='" + name + '\'' +
                 ", uuid=" + uuid +
                 ", calendar=" + calendar +
                 ", erstelleruserid='" + erstelleruserid + '\'' +
                 '}';
+    }
+
+    public MessageEmbed getZitatEmbed() {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        /*
+           TODO: Zitat Design
+         */
+
+        return eb.build();
     }
 }

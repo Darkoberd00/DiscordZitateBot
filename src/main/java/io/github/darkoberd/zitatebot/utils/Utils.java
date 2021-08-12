@@ -1,6 +1,5 @@
 package io.github.darkoberd.zitatebot.utils;
 
-import io.github.darkoberd.zitatebot.Zitat;
 import io.github.darkoberd.zitatebot.ZitateBot;
 
 import java.awt.*;
@@ -19,6 +18,6 @@ public class Utils {
     public static String zitatPB = ZitateBot.getJda().getSelfUser().getAvatarUrl();
     public static String zitatCreatorPB = "https://imgur.com/TMQAR5W.png";
 
-    public static int deleteTime = 10;
-    public static TimeUnit deleteTimeUnit = TimeUnit.SECONDS;
+    public static int deleteTime = 1;
+    public static TimeUnit deleteTimeUnit = TimeUnit.MINUTES;
 }
