@@ -1,12 +1,17 @@
 package io.github.darkoberd.zitatebot.listeners;
 
 import io.github.darkoberd.zitatebot.Zitat;
+import io.github.darkoberd.zitatebot.ZitatChannel;
 import io.github.darkoberd.zitatebot.ZitateBot;
 import io.github.darkoberd.zitatebot.utils.Flags;
 import io.github.darkoberd.zitatebot.utils.Massages;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class PrivateMessageListener extends ListenerAdapter {
 
@@ -45,11 +50,21 @@ public class PrivateMessageListener extends ListenerAdapter {
 
                                 ZitateBot.zitate.put(zitat.getUuid()+"", zitat);
 
-                                /*
-                                    TODO: zitat in einem Channel versenden!
-                                 */
+                                if(ZitateBot.zitatChannels.containsKey(zitat.getGuildid())) {
 
-                                event.getChannel().sendMessageEmbeds(Massages.zitatSussecs()).queue();
+                                    Guild guild = ZitateBot.getJda().getGuildById(zitat.getGuildid());
+                                    ZitatChannel zc = ZitateBot.zitatChannels.get(zitat.getGuildid());
+                                    TextChannel tc = Objects.requireNonNull(guild).getTextChannelById(zc.getZitatChannelID());
+                                    Objects.requireNonNull(tc).sendMessageEmbeds(zitat.getZitatEmbed()).queue(message -> {
+                                        message.addReaction("📈").queue();
+                                        message.addReaction("📉").queue();
+                                    });
+
+
+                                    event.getChannel().sendMessageEmbeds(Massages.zitatSussecs()).queue();
+                                } else {
+                                    event.getChannel().sendMessageEmbeds(Massages.error("zitatchatnotfound")).queue();
+                                }
 
                             }else{
 
@@ -57,6 +72,7 @@ public class PrivateMessageListener extends ListenerAdapter {
 
                             }
 
+                            ZitateBot.flags.remove(event.getAuthor().getId());
                             ZitateBot.zitate.remove(event.getAuthor().getId());
                         }
                         return;

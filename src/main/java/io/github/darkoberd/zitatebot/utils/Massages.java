@@ -1,5 +1,6 @@
 package io.github.darkoberd.zitatebot.utils;
 
+import io.github.darkoberd.zitatebot.ZitateBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -44,6 +45,46 @@ public class Massages {
                 eb.addField("Wie kann ich den Command benutzen?", "Du kannst den vorgesehenen Channel des Jeweiligen Server benutzen, um diesen Command aus zu führen.", false);
                 eb.addField("Es gibt keinen Channel!", "Du kannst einfach einen Admin fragen oder wenn du selbst Admin bist mit dem Command \"!zitat (h)ilfe\" dir alles durch Lesen.", false);
                 break;
+            case "scshortarguments":
+                eb.setTitle("Der Command hat zuwenig Argumente!");
+                eb.addField("Wie geht der Command?","Mit dem Command \"!zitat setchannel (h)elp\"",false);
+                break;
+            case "sclongarguments":
+                eb.setTitle("Der Command hat zuviele Argumente!");
+                eb.addField("Wie geht der Command?","Mit dem Command \"!zitat setchannel (h)elp\"",false);
+                break;
+            case "scnichtexistent":
+                eb.setTitle("Ein oder Beide Channel gibt es nicht!");
+                eb.addField("Warum?","der Bot kann die Channel nicht erkennen oder sie wurden gelöscht.",false);
+                break;
+            case "zitatechat":
+                eb.setTitle("Dieser Channel wird als Zitate Channel benutzt!");
+                eb.addField("Das ist ein only Botroom!", "Benutze darfür den vorgesehenen Channel!", false);
+                break;
+            case "zitatecrationchat":
+                eb.setTitle("Dieser Channel unterstützt den Bot nicht");
+                eb.addField("Wie kann ich es ändern?", "Mit dem Command \"!zitat setchannel (h)elp\" kann du mehr rausfinden",false);
+                break;
+            case "zitatchatnotfound":
+                eb.setTitle("Es wurde kein Channel hinzugefügt");
+                eb.addField("Es muss ein zitate Channel existieren!", "Du kannst einfach einen Admin fragen oder wenn du selbst Admin bist mit dem Command \"!zitat (h)ilfe\" dir alles durch Lesen.",false);
+            case "admin":
+                eb.setTitle("Dieser Command kann nur durch ein Admin ausgefürt werden!");
+                break;
+            case "easteregg":
+                eb.setAuthor("Dein Command muss über einem Discord Server Geschrieben werden", "https://gist.github.com/7743dc8f4f11a85cbeb8f6d6ec05f9b3.git", Utils.zitatPB);
+                eb.setTitle("Dein Command muss über einem Discord Server Geschrieben werden");
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , true);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , true);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , true);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , false);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , false);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , false);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , true);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , true);
+                eb.addField("Dein Command muss über einem Discord Server Geschrieben werden", "Dein Command muss über einem Discord Server Geschrieben werden" , true);
+                eb.setFooter("Wustest du das Dein Command nur auf einem Discord Server Funktioniert, Fun Fact!");
+                break;
             default:
                 eb.setTitle("Error Not Found");
                 eb.addField("Die Error ID: \"" + id + "\" wurde nicht gefunden!", "",false);
@@ -87,6 +128,19 @@ public class Massages {
         eb.setThumbnail(Utils.correctPB);
 
         eb.addField("Dein Zitat wurde erfolgreich eingereicht!", "Dein Zitat findest du dort, wo du dein Command eingegeben hast.", false);
+
+        return eb.build();
+    }
+
+    public static MessageEmbed channelSelectSussecs(String createZitatChannelID, String zitatChannelID){
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Utils.correct);
+        eb.setAuthor(ZitateBot.getJda().getSelfUser().getName(),null,Utils.zitatPB);
+        eb.setThumbnail(Utils.correctPB);
+
+        eb.setTitle("Die Channels wurden erfolgreich Configuriert!");
+        eb.addField("Zitat ertellungs Channel:","<#"+createZitatChannelID+">", false);
+        eb.addField("Zitat sammlungs Channel:","<#"+zitatChannelID+">",false);
 
         return eb.build();
     }

@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
 import java.text.SimpleDateFormat;
-import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -25,34 +24,45 @@ public class Zitat {
     private int points = 0;
 
     /**
-     * liste der gevoteten User;
+     * Liste der gevoteten User.
      */
     private List<String> votedusers;
 
     /**
-     * Pascal "Inneneinrichtungsexperte" Klaßen
+     * Der Aussaggebender des zitates. z.B Pascal "Inneneinrichtungsexperte" Klaßen
      */
     private String name;
 
     /**
-     * UUID für die einfachre wieder findung;
+     * UUID für die einfachre wieder findung.
      */
     private final UUID uuid;
 
     /**
-     * tag der einreichung
+     * Tag der einreichung.
      */
     private final Calendar calendar;
 
     /**
-     * wer hat das zitat eingereicht!
+     * ID des Erstellers des Zitat
      */
     private final String erstelleruserid;
 
     /**
-     * die ID des Servers
+     * Die ID des Servers.
      */
-    private String guildid;
+    private final String guildid;
+
+    public Zitat(String zitat, int points, List<String> votedusers, String name, UUID uuid, Calendar calendar, String erstelleruserid, String guildid) {
+        this.zitat = zitat;
+        this.points = points;
+        this.votedusers = votedusers;
+        this.name = name;
+        this.uuid = uuid;
+        this.calendar = calendar;
+        this.erstelleruserid = erstelleruserid;
+        this.guildid = guildid;
+    }
 
     public Zitat(String erstelleruserid, String guildid) {
         this.uuid = UUID.randomUUID();
@@ -77,9 +87,8 @@ public class Zitat {
         return uuid;
     }
 
-    public String getDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        return formatter.format(calendar.getTime());
+    public Calendar getCalendar() {
+        return calendar;
     }
 
     public String getErstelleruserid() {
@@ -114,6 +123,23 @@ public class Zitat {
         points--;
     }
 
+    public MessageEmbed getZitatEmbed() {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        User user = ZitateBot.getJda().getUserById(getErstelleruserid());
+        if(user != null){
+            eb.setAuthor(user.getName(), null, user.getAvatarUrl());
+        }
+        eb.setColor(Utils.zitat);
+        eb.setThumbnail(Utils.zitatPB);
+        eb.setTitle(getZitat());
+        eb.addField("~"+getName(), "Points: "+ getPoints(), false);
+        eb.setFooter("UUID:" +getUuid());
+        eb.setTimestamp(getCalendar().toInstant());
+
+        return eb.build();
+    }
+
     @Override
     public String toString() {
         return "Zitat{" +
@@ -124,23 +150,8 @@ public class Zitat {
                 ", uuid=" + uuid +
                 ", calendar=" + calendar +
                 ", erstelleruserid='" + erstelleruserid + '\'' +
+                ", guildid='" + guildid + '\'' +
                 '}';
     }
 
-    public MessageEmbed getZitatEmbed() {
-        EmbedBuilder eb = new EmbedBuilder();
-
-        User user = ZitateBot.getJda().getUserById(erstelleruserid);
-        if(user != null){
-            eb.setAuthor(user.getName(), null, user.getAvatarUrl());
-        }
-        eb.setColor(Utils.zitat);
-        eb.setThumbnail(Utils.zitatPB);
-        eb.setTitle(getZitat());
-        eb.addField("~"+getName(), "Points: "+ getPoints(), false);
-        eb.setFooter("UUID:" +getUuid());
-        eb.setTimestamp(calendar.toInstant());
-
-        return eb.build();
-    }
 }
