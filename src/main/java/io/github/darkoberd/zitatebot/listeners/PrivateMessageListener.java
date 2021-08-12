@@ -36,11 +36,13 @@ public class PrivateMessageListener extends ListenerAdapter {
                 if(zitat.haveAllImplements()){
 
                     if(ZitateBot.flags.containsKey(event.getAuthor().getId())) {
-                        if(ZitateBot.flags.get(event.getAuthor().getId()).isState(Flags.ABFRAGE)) {
 
-                            s= s.toLowerCase();
+                        if(ZitateBot.flags.get(event.getAuthor().getId()) == Flags.ABFRAGE) {
+
+                            s = s.toLowerCase();
 
                             if(s.equals("j") || s.equals("ja") || s.equals("y") || s.equals("yes")){
+
                                 ZitateBot.zitate.put(zitat.getUuid()+"", zitat);
 
                                 /*
@@ -61,7 +63,7 @@ public class PrivateMessageListener extends ListenerAdapter {
                     }
 
                     event.getChannel().sendMessageEmbeds(zitat.getZitatEmbed()).queue();
-
+                    event.getChannel().sendMessageEmbeds(Massages.zitatCreate("abfrage")).queue();
                     ZitateBot.flags.put(event.getAuthor().getId(), Flags.ABFRAGE);
 
                 }

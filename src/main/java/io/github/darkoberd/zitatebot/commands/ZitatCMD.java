@@ -15,14 +15,20 @@ public class ZitatCMD implements Command {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
+        if(!event.isFromGuild()){
+            event.getChannel().sendMessageEmbeds(Massages.error("nichtvomserver")).queue();
+            return;
+        }
+
         event.getMessage().delete().queue();
 
         if(args.length >= 1){
-            System.out.println(args[0]);
-            if(args[0].toLowerCase().equals("help") || args[0].toLowerCase().equals("h") || args[0].toLowerCase().equals("hilfe")){
-                event.getChannel().sendMessageEmbeds(Massages.help("zitat", help())).queue(message -> {
-                    message.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit);
-                });
+            String s = args[0].toLowerCase();
+
+            if(s.equals("help") || s.equals("h") || s.equals("hilfe")){
+                event.getChannel().sendMessageEmbeds(Massages.help("zitat", help())).queue(message ->
+                        message.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit)
+                );
                 return;
             }
         }
@@ -31,29 +37,31 @@ public class ZitatCMD implements Command {
             if(ZitateBot.DEBUG){
                 System.err.println("ZitatCMD -> event.getAuthor().openPrivateChannel() -> privateChannel.sendMessageEmbeds() -> if(ZitateBot.zitate.containsKey()): User hat schon ein Zitat");
             }
-            event.getChannel().sendMessageEmbeds(Massages.error("existingzitatcreation")).queue(message -> {
-                message.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit);
-            });
+            event.getChannel().sendMessageEmbeds(Massages.error("existingzitatcreation")).queue(message ->
+                message.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit)
+            );
             return;
         }
 
-        event.getAuthor().openPrivateChannel().queue(privateChannel -> {
+        event.getAuthor().openPrivateChannel().queue(privateChannel ->
 
-            privateChannel.sendMessageEmbeds(Massages.zitatCreate()).queue(massage -> {
+            privateChannel.sendMessageEmbeds(Massages.zitatCreate("start")).queue(massage ->
 
-                ZitateBot.zitate.put(event.getAuthor().getId(), new Zitat(event.getAuthor().getId()));
+                ZitateBot.zitate.put(event.getAuthor().getId(), new Zitat(event.getAuthor().getId(), event.getGuild().getId()))
 
-            }, e -> {
+            , e -> {
+
                 if(ZitateBot.DEBUG){
                     System.err.println("ZitatCMD -> event.getAuthor().openPrivateChannel() -> privateChannel.sendMessageEmbeds(): " + e.getMessage());
                 }
-                event.getChannel().sendMessageEmbeds(Massages.error("privatemessage")).queue(error -> {
-                    error.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit);
-                });
+                
+                event.getChannel().sendMessageEmbeds(Massages.error("privatemessage")).queue(error ->
+                    error.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit)
+                );
 
-            });
+            })
 
-        });
+        );
 
     }
 

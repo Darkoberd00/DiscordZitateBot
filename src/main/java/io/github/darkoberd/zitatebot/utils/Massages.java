@@ -17,6 +17,7 @@ public class Massages {
     }
 
     public static MessageEmbed error(String id) {
+        id = id.toLowerCase();
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Utils.error);
@@ -38,25 +39,43 @@ public class Massages {
                 eb.addField("Was ist passiert?","Dein Zitat wurde von ein Command oder eines Admins gelöscht",false);
                 eb.addField("Oder!","Du hast bei der Erstellung eines Zitates auf Nein geantwortet!",false);
                 break;
+            case "nichtvomserver":
+                eb.setTitle("Der Command muss von einem Server ausgehen!");
+                eb.addField("Wie kann ich den Command benutzen?", "Du kannst den vorgesehenen Channel des Jeweiligen Server benutzen, um diesen Command aus zu führen.", false);
+                eb.addField("Es gibt keinen Channel!", "Du kannst einfach einen Admin fragen oder wenn du selbst Admin bist mit dem Command \"!zitat (h)ilfe\" dir alles durch Lesen.", false);
+                break;
             default:
                 eb.setTitle("Error Not Found");
-                eb.addField("Die Error ID:" + id + "wurde nicht gefunden!", "",false);
+                eb.addField("Die Error ID: \"" + id + "\" wurde nicht gefunden!", "",false);
                 break;
         }
 
         return eb.build();
     }
 
-    public static MessageEmbed zitatCreate() {
+    public static MessageEmbed zitatCreate(String id) {
+        id = id.toLowerCase();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Utils.zitatCreator);
         eb.setAuthor("Zitate Creator Center");
         eb.setThumbnail(Utils.zitatCreatorPB);
 
-        eb.addField("Wie funktioniert das?","Ganz einfach die Erste Nachricht die du mir schreibst ist das Zitat. z.B. Wie heißen die Säcke in die man sich reinsetzen kann? "+
-                "\n\n Die Zweite Nachricht ist der Jenige der das Zitat getätigt hat. \nz.B. Pascal \"Inneneinrichtungsexperte\" Klaßen" +
-                "\n\n Bei der dritten Nachtricht wird abgefragt ob du zufrieden bist. Antworte mit (J)a oder (N)ein." +
-                "\n\n Der Rest kümmert sich der Bot. Viel Spaß!", false);
+        switch (id) {
+            case "start":
+                eb.addField("Wie funktioniert das?", "Ganz einfach die Erste Nachricht die du mir schreibst ist das Zitat. z.B. Wie heißen die Säcke in die man sich reinsetzen kann? " +
+                    "\n\n Die Zweite Nachricht ist der Jenige der das Zitat getätigt hat. \nz.B. Pascal \"Inneneinrichtungsexperte\" Klaßen" +
+                    "\n\n Bei der dritten Nachtricht wird abgefragt ob du zufrieden bist. Antworte mit (J)a oder (N)ein." +
+                    "\n\n Der Rest kümmert sich der Bot. Viel Spaß!", false);
+                break;
+            case "abfrage":
+                eb.setTitle("Gefält dir das Zitat?");
+                eb.addField("Antwort:", "(J)a oder (N)ein",false);
+                break;
+            default:
+                eb.setTitle("ID Not Found");
+                eb.addField("Die ID: \"" + id + "\" wurde nicht gefunden!", "",false);
+                break;
+        }
 
         return eb.build();
     }

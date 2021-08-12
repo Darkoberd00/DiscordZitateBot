@@ -1,9 +1,12 @@
 package io.github.darkoberd.zitatebot;
 
+import io.github.darkoberd.zitatebot.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.text.SimpleDateFormat;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -46,18 +49,20 @@ public class Zitat {
      */
     private final String erstelleruserid;
 
-    public Zitat(String zitat, String name, UUID uuid, Calendar calendar, String erstelleruserid) {
-        this.zitat = zitat;
-        this.name = name;
-        this.uuid = uuid;
-        this.calendar = calendar;
-        this.erstelleruserid = erstelleruserid;
-    }
+    /**
+     * die ID des Servers
+     */
+    private String guildid;
 
-    public Zitat(String erstelleruserid) {
+    public Zitat(String erstelleruserid, String guildid) {
         this.uuid = UUID.randomUUID();
         this.erstelleruserid = erstelleruserid;
         this.calendar = Calendar.getInstance();
+        this.guildid = guildid;
+    }
+
+    public String getGuildid(){
+        return guildid;
     }
 
     public String getZitat() {
@@ -125,9 +130,16 @@ public class Zitat {
     public MessageEmbed getZitatEmbed() {
         EmbedBuilder eb = new EmbedBuilder();
 
-        /*
-           TODO: Zitat Design
-         */
+        User user = ZitateBot.getJda().getUserById(erstelleruserid);
+        if(user != null){
+            eb.setAuthor(user.getName(), null, user.getAvatarUrl());
+        }
+        eb.setColor(Utils.zitat);
+        eb.setThumbnail(Utils.zitatPB);
+        eb.setTitle(getZitat());
+        eb.addField("~"+getName(), "Points: "+ getPoints(), false);
+        eb.setFooter("UUID:" +getUuid());
+        eb.setTimestamp(calendar.toInstant());
 
         return eb.build();
     }
