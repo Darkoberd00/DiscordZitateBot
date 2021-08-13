@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +36,8 @@ public class ZitateBot {
     public static Map<String, Flags> flags = new HashMap<>();
 
     public static Map<String, Zitat> zitate = new HashMap<>();
+
+    public static Map<String, ZitatChannel> zitatChannels = new HashMap<>();
 
     public static void main(String[] args) {
         if (args.length < 1) {
