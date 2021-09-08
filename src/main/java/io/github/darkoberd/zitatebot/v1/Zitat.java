@@ -1,11 +1,11 @@
-package io.github.darkoberd.zitatebot;
+package io.github.darkoberd.zitatebot.v1;
 
-import io.github.darkoberd.zitatebot.utils.Utils;
+import io.github.darkoberd.zitatebot.v1.utils.Utils;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -126,7 +126,7 @@ public class Zitat {
     public MessageEmbed getZitatEmbed() {
         EmbedBuilder eb = new EmbedBuilder();
 
-        User user = ZitateBot.getJda().getUserById(getErstelleruserid());
+        User user = ZitateBot.getJda().getUserById(erstelleruserid);
         if(user != null){
             eb.setAuthor(user.getName(), null, user.getAvatarUrl());
         }

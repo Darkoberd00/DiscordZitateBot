@@ -1,6 +1,7 @@
-package io.github.darkoberd.zitatebot.utils;
+package io.github.darkoberd.zitatebot.v1.utils;
 
-import io.github.darkoberd.zitatebot.ZitateBot;
+import io.github.darkoberd.zitatebot.v1.ZitateBot;
+
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;

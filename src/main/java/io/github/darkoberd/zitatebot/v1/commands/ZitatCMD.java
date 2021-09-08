@@ -1,22 +1,19 @@
-package io.github.darkoberd.zitatebot.commands;
+package io.github.darkoberd.zitatebot.v1.commands;
 
-import io.github.darkoberd.zitatebot.Zitat;
-import io.github.darkoberd.zitatebot.ZitatChannel;
-import io.github.darkoberd.zitatebot.ZitateBot;
-import io.github.darkoberd.zitatebot.utils.Command;
-import io.github.darkoberd.zitatebot.utils.Flags;
-import io.github.darkoberd.zitatebot.utils.Massages;
-import io.github.darkoberd.zitatebot.utils.Utils;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import io.github.darkoberd.zitatebot.v1.Zitat;
+import io.github.darkoberd.zitatebot.v1.ZitatChannel;
+import io.github.darkoberd.zitatebot.v1.ZitateBot;
+import io.github.darkoberd.zitatebot.v1.utils.Command;
+import io.github.darkoberd.zitatebot.v1.utils.Flags;
+import io.github.darkoberd.zitatebot.v1.utils.Massages;
+import io.github.darkoberd.zitatebot.v1.utils.Utils;
+
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class ZitatCMD implements Command {
+
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -31,14 +28,9 @@ public class ZitatCMD implements Command {
             return;
         }
 
-        event.getMessage().delete().queue();
-
-
-        if(ZitateBot.zitatChannels.containsKey(event.getGuild().getId())){
-            ZitatChannel zc = ZitateBot.zitatChannels.get(event.getGuild().getId());
-            if(!zc.getCreateZitatChannelID().equals(event.getChannel().getId())){
-                event.getChannel().sendMessageEmbeds(Massages.error("zitatecrationchat")).queue(message ->
-                        message.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit));
+        if(ZitateBot.zitatChannel.containsKey(event.getGuild().getId())){
+            ZitatChannel zc = ZitateBot.zitatChannel.get(event.getGuild().getId());
+            if(!zc.getChannelID().equals(event.getChannel().getId())){
                 return;
             }
         }else{
@@ -46,6 +38,8 @@ public class ZitatCMD implements Command {
                 ZitateBot.flags.put(event.getAuthor().getId(), Flags.ZITATCHATNOTFOUND);
             }
         }
+
+        event.getMessage().delete().queue();
 
         if(args.length >= 1){
 
@@ -60,8 +54,9 @@ public class ZitatCMD implements Command {
                 );
                 return;
             }else if(first.equals("setchannel") || first.equals("sc")){
+                String serverOwnerID = event.getGuild().getOwnerId();
 
-                if(!event.getAuthor().getId().equals(Objects.requireNonNull(event.getGuild().getOwner()).getId()) || !isAdmin(event.getAuthor(),event.getGuild())){
+                if((!event.getAuthor().getId().equals(serverOwnerID)) || (!Utils.isAdmin(event.getAuthor(),event.getGuild()))){
                     event.getChannel().sendMessageEmbeds(Massages.error("admin")).queue(message ->
                             message.delete().queueAfter(Utils.deleteTime, Utils.deleteTimeUnit));
                     return;
@@ -78,21 +73,17 @@ public class ZitatCMD implements Command {
                         return;
                     }
 
-                    if(args.length == 3){
-                        String third = args[2];
+                    if(args.length == 2){
 
                         sec = sec.replace("<#", "");
                         sec = sec.replace(">", "");
 
-                        third = third.replace("<#", "");
-                        third = third.replace(">", "");
+                        if(Utils.isChannel(event,sec)){
 
-                        if(isChannel(event,sec) && isChannel(event,third)){
+                            ZitateBot.zitatChannel.remove(event.getGuild().getId());
+                            ZitateBot.zitatChannel.put(event.getGuild().getId(), new ZitatChannel(sec));
 
-                            ZitateBot.zitatChannels.remove(event.getGuild().getId());
-                            ZitateBot.zitatChannels.put(event.getGuild().getId(), new ZitatChannel(sec,third));
-
-                            event.getChannel().sendMessageEmbeds(Massages.channelSelectSussecs(sec,third)).queue();
+                            event.getChannel().sendMessageEmbeds(Massages.channelSelectSussecs(sec)).queue();
                             return;
                         }
 
@@ -157,23 +148,6 @@ public class ZitatCMD implements Command {
 
     }
 
-    private boolean isAdmin(User author, Guild guild) {
-        Member member = guild.getMember(author);
-        assert member != null;
-        if(!member.getRoles().isEmpty()) {
-            for(Role role : member.getRoles()){
-                if (!role.getPermissions().isEmpty()){
-                    for (Permission per : role.getPermissions()) {
-                        if(per == Permission.ADMINISTRATOR){
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     @Override
     public void executed(boolean sucess, MessageReceivedEvent event) {
         if(sucess){
@@ -197,28 +171,11 @@ public class ZitatCMD implements Command {
                 return "";
             case "setchannel":
                 return "Der Command setzet die Channels!" +
-                        "\nsyntax: !zitat setchannel <createZitatChannel> <zitatChannel>";
+                        "\nsyntax: !zitat setchannel <zitatChannel>";
             default:
                 return "ID: \"" + id +"\" nicht gefunden!";
         }
 
-    }
-
-    private boolean isChannel(MessageReceivedEvent event, String channelid){
-        try {
-            Guild g = ZitateBot.getJda().getGuildById(event.getGuild().getId());
-            if ( g == null){
-                return false;
-            }
-            TextChannel tc = g.getTextChannelById(channelid);
-            if(tc == null){
-                return false;
-            }
-            String name = tc.getName();
-        }catch (NullPointerException | NumberFormatException e){
-            return false;
-        }
-        return true;
     }
 
 }

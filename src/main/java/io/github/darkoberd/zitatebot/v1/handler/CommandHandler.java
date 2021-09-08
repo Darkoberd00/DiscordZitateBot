@@ -1,8 +1,8 @@
-package io.github.darkoberd.zitatebot.handler;
+package io.github.darkoberd.zitatebot.v1.handler;
 
 
-import io.github.darkoberd.zitatebot.utils.Command;
-import io.github.darkoberd.zitatebot.utils.CommandParser;
+import io.github.darkoberd.zitatebot.v1.utils.Command;
+import io.github.darkoberd.zitatebot.v1.utils.CommandParser;
 
 import java.util.HashMap;
 

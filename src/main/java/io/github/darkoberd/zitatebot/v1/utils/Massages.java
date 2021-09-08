@@ -1,6 +1,7 @@
-package io.github.darkoberd.zitatebot.utils;
+package io.github.darkoberd.zitatebot.v1.utils;
 
-import io.github.darkoberd.zitatebot.ZitateBot;
+import io.github.darkoberd.zitatebot.v1.ZitateBot;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -54,20 +55,12 @@ public class Massages {
                 eb.addField("Wie geht der Command?","Mit dem Command \"!zitat setchannel (h)elp\"",false);
                 break;
             case "scnichtexistent":
-                eb.setTitle("Ein oder Beide Channel gibt es nicht!");
+                eb.setTitle("Der eingetragende Channel wurde nicht gefunden!");
                 eb.addField("Warum?","der Bot kann die Channel nicht erkennen oder sie wurden gelöscht.",false);
-                break;
-            case "zitatechat":
-                eb.setTitle("Dieser Channel wird als Zitate Channel benutzt!");
-                eb.addField("Das ist ein only Botroom!", "Benutze darfür den vorgesehenen Channel!", false);
-                break;
-            case "zitatecrationchat":
-                eb.setTitle("Dieser Channel unterstützt den Bot nicht");
-                eb.addField("Wie kann ich es ändern?", "Mit dem Command \"!zitat setchannel (h)elp\" kann du mehr rausfinden",false);
                 break;
             case "zitatchatnotfound":
                 eb.setTitle("Es wurde kein Channel hinzugefügt");
-                eb.addField("Es muss ein zitate Channel existieren!", "Du kannst einfach einen Admin fragen oder wenn du selbst Admin bist mit dem Command \"!zitat (h)ilfe\" dir alles durch Lesen.",false);
+                eb.addField("Es muss ein zitate Channel existieren!", "Ganz einfach. Frag ein Admin oder den Server besitzer das er ein Channel erstellt",false);
             case "admin":
                 eb.setTitle("Dieser Command kann nur durch ein Admin ausgefürt werden!");
                 break;
@@ -132,15 +125,14 @@ public class Massages {
         return eb.build();
     }
 
-    public static MessageEmbed channelSelectSussecs(String createZitatChannelID, String zitatChannelID){
+    public static MessageEmbed channelSelectSussecs(String channelID){
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Utils.correct);
         eb.setAuthor(ZitateBot.getJda().getSelfUser().getName(),null,Utils.zitatPB);
         eb.setThumbnail(Utils.correctPB);
 
-        eb.setTitle("Die Channels wurden erfolgreich Configuriert!");
-        eb.addField("Zitat ertellungs Channel:","<#"+createZitatChannelID+">", false);
-        eb.addField("Zitat sammlungs Channel:","<#"+zitatChannelID+">",false);
+        eb.setTitle("Der Channel wurden erfolgreich Configuriert!");
+        eb.addField("Channelname:","<#"+channelID+">", false);
 
         return eb.build();
     }

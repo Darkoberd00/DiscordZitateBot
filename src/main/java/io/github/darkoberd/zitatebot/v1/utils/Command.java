@@ -1,4 +1,4 @@
-package io.github.darkoberd.zitatebot.utils;
+package io.github.darkoberd.zitatebot.v1.utils;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

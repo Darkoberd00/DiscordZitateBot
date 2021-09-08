@@ -1,14 +1,16 @@
-package io.github.darkoberd.zitatebot.listeners;
+package io.github.darkoberd.zitatebot.v1.listeners;
 
-import io.github.darkoberd.zitatebot.Zitat;
-import io.github.darkoberd.zitatebot.ZitatChannel;
-import io.github.darkoberd.zitatebot.ZitateBot;
-import io.github.darkoberd.zitatebot.utils.Flags;
-import io.github.darkoberd.zitatebot.utils.Massages;
+import io.github.darkoberd.zitatebot.v1.Zitat;
+import io.github.darkoberd.zitatebot.v1.ZitatChannel;
+import io.github.darkoberd.zitatebot.v1.ZitateBot;
+import io.github.darkoberd.zitatebot.v1.utils.Flags;
+import io.github.darkoberd.zitatebot.v1.utils.Massages;
+
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -50,16 +52,15 @@ public class PrivateMessageListener extends ListenerAdapter {
 
                                 ZitateBot.zitate.put(zitat.getUuid()+"", zitat);
 
-                                if(ZitateBot.zitatChannels.containsKey(zitat.getGuildid())) {
+                                if(ZitateBot.zitatChannel.containsKey(zitat.getGuildid())) {
 
                                     Guild guild = ZitateBot.getJda().getGuildById(zitat.getGuildid());
-                                    ZitatChannel zc = ZitateBot.zitatChannels.get(zitat.getGuildid());
-                                    TextChannel tc = Objects.requireNonNull(guild).getTextChannelById(zc.getZitatChannelID());
+                                    ZitatChannel zc = ZitateBot.zitatChannel.get(zitat.getGuildid());
+                                    TextChannel tc = Objects.requireNonNull(guild).getTextChannelById(zc.getChannelID());
                                     Objects.requireNonNull(tc).sendMessageEmbeds(zitat.getZitatEmbed()).queue(message -> {
                                         message.addReaction("📈").queue();
                                         message.addReaction("📉").queue();
                                     });
-
 
                                     event.getChannel().sendMessageEmbeds(Massages.zitatSussecs()).queue();
                                 } else {
