@@ -1,9 +1,9 @@
 package io.github.darkoberd.zitatebot.v2;
 
-import io.github.darkoberd.zitatebot.v2.commands.TestCmd;
 import io.github.darkoberd.zitatebot.v2.commands.ZitatCMD;
 import io.github.darkoberd.zitatebot.v2.commands.ZitatDeleteCMD;
 import io.github.darkoberd.zitatebot.v2.listeners.CommandListener;
+import io.github.darkoberd.zitatebot.v2.listeners.ComponentListener;
 import io.github.darkoberd.zitatebot.v2.utils.Command;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -23,6 +23,7 @@ public class ZitateBot {
     private static JDA jda;
     private static final Logger LOGGER = LoggerFactory.getLogger(ZitateBot.class);
     public static List<Command> commandList = new ArrayList<>();
+    public static List<Zitat> zitate = new ArrayList<>();
 
     public static void main(String[] args){
         if (args.length < 1) {
@@ -46,6 +47,7 @@ public class ZitateBot {
         builder.setStatus(OnlineStatus.ONLINE);
         addCommands();
         builder.addEventListeners(new CommandListener());
+        builder.addEventListeners(new ComponentListener());
         jda = builder.build();
         addSlashCommands();
         try {
@@ -58,7 +60,6 @@ public class ZitateBot {
     private static void addCommands() {
         commandList.add(new ZitatCMD());
         commandList.add(new ZitatDeleteCMD());
-        commandList.add(new TestCmd());
     }
 
     private static void addSlashCommands() {

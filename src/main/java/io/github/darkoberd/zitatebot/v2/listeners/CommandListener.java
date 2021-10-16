@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 public class CommandListener extends ListenerAdapter {
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
-        boolean abfrage = false;
         for (Command cmds: ZitateBot.commandList) {
             if(cmds.cmdname().equals(event.getName())){
                 cmds.action(event);
